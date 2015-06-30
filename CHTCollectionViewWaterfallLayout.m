@@ -31,7 +31,7 @@ NSString *const CHTCollectionElementKindSectionFooter = @"CHTCollectionElementKi
 @implementation CHTCollectionViewWaterfallLayout
 
 /// How many items to be union into a single rectangle
-static const NSInteger unionSize = 20;
+static const NSInteger _CHTUnionSize = 20;
 
 static CGFloat CHTFloorCGFloat(CGFloat value) {
   CGFloat scale = [UIScreen mainScreen].scale;
@@ -372,7 +372,7 @@ static CGFloat CHTFloorCGFloat(CGFloat value) {
   NSInteger itemCounts = [self.allItemAttributes count];
   while (idx < itemCounts) {
     CGRect unionRect = ((UICollectionViewLayoutAttributes *)self.allItemAttributes[idx]).frame;
-    NSInteger rectEndIndex = MIN(idx + unionSize, itemCounts);
+    NSInteger rectEndIndex = MIN(idx + _CHTUnionSize, itemCounts);
 
     for (NSInteger i = idx + 1; i < rectEndIndex; i++) {
       unionRect = CGRectUnion(unionRect, ((UICollectionViewLayoutAttributes *)self.allItemAttributes[i]).frame);
@@ -427,13 +427,13 @@ static CGFloat CHTFloorCGFloat(CGFloat value) {
 
   for (i = 0; i < self.unionRects.count; i++) {
     if (CGRectIntersectsRect(rect, [self.unionRects[i] CGRectValue])) {
-      begin = i * unionSize;
+      begin = i * _CHTUnionSize;
       break;
     }
   }
   for (i = self.unionRects.count - 1; i >= 0; i--) {
     if (CGRectIntersectsRect(rect, [self.unionRects[i] CGRectValue])) {
-      end = MIN((i + 1) * unionSize, self.allItemAttributes.count);
+      end = MIN((i + 1) * _CHTUnionSize, self.allItemAttributes.count);
       break;
     }
   }
